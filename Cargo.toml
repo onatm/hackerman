@@ -1,0 +1,8 @@
+[package]
+name = "hackerman"
+version = "0.1.0"
+authors = ["onatm <onatmercan@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+nom="^4.1"
