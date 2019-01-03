@@ -55,7 +55,7 @@ named!(lex_dest<&str, Token>,
 
 named!(lex_comp<&str, Token>,
     do_parse!(
-        comp: alt!(
+        comp: alt_complete!(
             tag!("0") |
             tag!("1") |
             tag!("-1") |
@@ -109,15 +109,15 @@ named!(lex_jump<&str, Token>,
 
 named!(parse_compute<&str, Instruction>,
     do_parse!(
-        dest: opt!(lex_dest) >>
-        comp: opt!(lex_comp) >>
-        jump: opt!(lex_jump) >>
+        dest: opt!(complete!(lex_dest)) >>
+        comp: opt!(complete!(lex_comp)) >>
+        jump: opt!(complete!(lex_jump)) >>
         (Instruction::Compute{ dest: dest, comp: comp, jump: jump })
     )
 );
 
 named!(parse_instruction<&str, Instruction>,
-    alt_complete!(
+    alt!(
         parse_label |
         parse_address |
         parse_compute
