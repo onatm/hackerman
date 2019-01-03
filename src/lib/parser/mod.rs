@@ -151,6 +151,36 @@ fn label_instruction() {
 }
 
 #[test]
+fn dest_token() {
+  let expected_token = Token::Dest(&"M");
+
+  let token = lex_dest("M=");
+  let (_, token) = token.unwrap();
+
+  assert_eq!(token, expected_token);
+}
+
+#[test]
+fn comp_token() {
+  let expected_token = Token::Comp(&"D&A");
+
+  let token = lex_comp("D&A");
+  let (_, token) = token.unwrap();
+
+  assert_eq!(token, expected_token);
+}
+
+#[test]
+fn jump_token() {
+  let expected_token = Token::Jump(&"JNE");
+
+  let token = lex_jump(";JNE");
+  let (_, token) = token.unwrap();
+
+  assert_eq!(token, expected_token);
+}
+
+#[test]
 fn compute_instruction() {
   let expected_instruction = Instruction::Compute {
     dest: Some(Token::Dest(&"M")),
