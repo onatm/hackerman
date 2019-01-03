@@ -195,7 +195,7 @@ fn full_compute_instruction() {
 }
 
 #[test]
-fn compute_instruction_with_dest() {
+fn compute_instruction_with_dest_and_comp() {
   let expected_instruction = Instruction::Compute {
     dest: Some(Token::Dest(&"D")),
     comp: Some(Token::Comp(&"A")),
