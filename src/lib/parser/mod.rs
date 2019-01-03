@@ -125,8 +125,14 @@ named!(parse_instruction<&str, Instruction>,
 );
 
 impl Parser {
-  pub fn parse(input: &str) -> Instruction {
-    parse_instruction(input).unwrap().1
+  pub fn parse(input: &str) -> Vec<Instruction> {
+    let mut instructions: Vec<Instruction> = Vec::new();
+
+    for line in input.lines() {
+      instructions.push(parse_instruction(line.trim_start()).unwrap().1);
+    }
+
+    instructions
   }
 }
 

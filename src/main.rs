@@ -28,8 +28,9 @@ fn assemble(config: Config) -> Result<(), Box<Error>> {
     let mut contents = String::new();
     f.read_to_string(&mut contents)?;
 
-    for line in contents.lines() {
-        let instruction = Parser::parse(line.trim_start());
+    let instructions = Parser::parse(&contents);
+
+    for instruction in instructions {
         println!("{:?}", instruction);
     }
 
