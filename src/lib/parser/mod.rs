@@ -207,3 +207,17 @@ fn compute_instruction_with_dest() {
 
   assert_eq!(instruction, expected_instruction);
 }
+
+#[test]
+fn compute_instruction_with_comp_and_jump() {
+  let expected_instruction = Instruction::Compute {
+    dest: None,
+    comp: Some(Token::Comp(&"0")),
+    jump: Some(Token::Jump(&"JMP")),
+  };
+
+  let instruction = parse_instruction("0;JMP");
+  let (_, instruction) = instruction.unwrap();
+
+  assert_eq!(instruction, expected_instruction);
+}
