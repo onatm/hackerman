@@ -4,5 +4,9 @@ version = "0.1.0"
 authors = ["onatm <onatmercan@gmail.com>"]
 edition = "2018"
 
+[lib]
+name = "hackerman_lib"
+path = "src/lib/hackerman.rs"
+
 [dependencies]
-nom="^4.1"
+nom = "^4.1"
