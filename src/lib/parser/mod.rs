@@ -14,7 +14,7 @@ pub enum Instruction<'a> {
   Address(&'a str),
   Compute {
     dest: Option<Token<'a>>,
-    comp: Option<Token<'a>>,
+    comp: Token<'a>,
     jump: Option<Token<'a>>,
   },
   Label(&'a str),
@@ -110,7 +110,7 @@ named!(lex_jump<&str, Token>,
 named!(parse_compute<&str, Instruction>,
     do_parse!(
         dest: opt!(complete!(lex_dest)) >>
-        comp: opt!(complete!(lex_comp)) >>
+        comp: complete!(lex_comp) >>
         jump: opt!(complete!(lex_jump)) >>
         (Instruction::Compute{ dest: dest, comp: comp, jump: jump })
     )
@@ -190,7 +190,7 @@ fn jump_token() {
 fn full_compute_instruction() {
   let expected_instruction = Instruction::Compute {
     dest: Some(Token::Dest(&"M")),
-    comp: Some(Token::Comp(&"D|A")),
+    comp: Token::Comp(&"D|A"),
     jump: Some(Token::Jump(&"JNE")),
   };
 
@@ -204,7 +204,7 @@ fn full_compute_instruction() {
 fn compute_instruction_with_dest_and_comp() {
   let expected_instruction = Instruction::Compute {
     dest: Some(Token::Dest(&"D")),
-    comp: Some(Token::Comp(&"A")),
+    comp: Token::Comp(&"A"),
     jump: None,
   };
 
@@ -218,7 +218,7 @@ fn compute_instruction_with_dest_and_comp() {
 fn compute_instruction_with_comp_and_jump() {
   let expected_instruction = Instruction::Compute {
     dest: None,
-    comp: Some(Token::Comp(&"0")),
+    comp: Token::Comp(&"0"),
     jump: Some(Token::Jump(&"JMP")),
   };
 
