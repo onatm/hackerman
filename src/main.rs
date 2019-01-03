@@ -1,4 +1,8 @@
+use hackerman_lib::parser::Parser;
 use std::env;
+use std::error::Error;
+use std::fs::File;
+use std::io::Read;
 use std::process;
 
 struct Config {
@@ -18,6 +22,20 @@ impl Config {
     }
 }
 
+fn assemble(config: Config) -> Result<(), Box<Error>> {
+    let mut f = File::open(config.input)?;
+
+    let mut contents = String::new();
+    f.read_to_string(&mut contents)?;
+
+    for line in contents.lines() {
+        let instruction = Parser::parse(line.trim_start());
+        println!("{:?}", instruction);
+    }
+
+    Ok(())
+}
+
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -27,4 +45,5 @@ fn main() {
     });
 
     println!("hackerman...");
+    let _ = assemble(config);
 }
