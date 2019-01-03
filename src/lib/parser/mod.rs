@@ -4,20 +4,20 @@ pub struct Parser;
 
 #[derive(Debug, PartialEq)]
 pub enum Token<'a> {
-  Dest(&'a str),
-  Comp(&'a str),
-  Jump(&'a str),
+    Dest(&'a str),
+    Comp(&'a str),
+    Jump(&'a str),
 }
 
 #[derive(Debug, PartialEq)]
 pub enum Instruction<'a> {
-  Address(&'a str),
-  Compute {
-    dest: Option<Token<'a>>,
-    comp: Option<Token<'a>>,
-    jump: Option<Token<'a>>,
-  },
-  Label(&'a str),
+    Address(&'a str),
+    Compute {
+        dest: Option<Token<'a>>,
+        comp: Option<Token<'a>>,
+        jump: Option<Token<'a>>,
+    },
+    Label(&'a str),
 }
 
 named!(parse_address<&str, Instruction>,
@@ -125,71 +125,71 @@ named!(parse_instruction<&str, Instruction>,
 );
 
 impl Parser {
-  pub fn parse(input: &str) -> Instruction {
-    parse_instruction(input).unwrap().1
-  }
+    pub fn parse(input: &str) -> Instruction {
+        parse_instruction(input).unwrap().1
+    }
 }
 
 #[test]
 fn address_instruction() {
-  let expected_instruction = Instruction::Address(&"sum");
+    let expected_instruction = Instruction::Address(&"sum");
 
-  let instruction = parse_instruction("@sum");
-  let (_, instruction) = instruction.unwrap();
+    let instruction = parse_instruction("@sum");
+    let (_, instruction) = instruction.unwrap();
 
-  assert_eq!(instruction, expected_instruction);
+    assert_eq!(instruction, expected_instruction);
 }
 
 #[test]
 fn label_instruction() {
-  let expected_instruction = Instruction::Label(&"LABEL");
+    let expected_instruction = Instruction::Label(&"LABEL");
 
-  let instruction = parse_instruction("(LABEL)");
-  let (_, instruction) = instruction.unwrap();
+    let instruction = parse_instruction("(LABEL)");
+    let (_, instruction) = instruction.unwrap();
 
-  assert_eq!(instruction, expected_instruction);
+    assert_eq!(instruction, expected_instruction);
 }
 
 #[test]
 fn dest_token() {
-  let expected_token = Token::Dest(&"M");
+    let expected_token = Token::Dest(&"M");
 
-  let token = lex_dest("M=");
-  let (_, token) = token.unwrap();
+    let token = lex_dest("M=");
+    let (_, token) = token.unwrap();
 
-  assert_eq!(token, expected_token);
+    assert_eq!(token, expected_token);
 }
 
 #[test]
 fn comp_token() {
-  let expected_token = Token::Comp(&"D&A");
+    let expected_token = Token::Comp(&"D&A");
 
-  let token = lex_comp("D&A");
-  let (_, token) = token.unwrap();
+    let token = lex_comp("D&A");
+    let (_, token) = token.unwrap();
 
-  assert_eq!(token, expected_token);
+    assert_eq!(token, expected_token);
 }
 
 #[test]
 fn jump_token() {
-  let expected_token = Token::Jump(&"JNE");
+    let expected_token = Token::Jump(&"JNE");
 
-  let token = lex_jump(";JNE");
-  let (_, token) = token.unwrap();
+    let token = lex_jump(";JNE");
+    let (_, token) = token.unwrap();
 
-  assert_eq!(token, expected_token);
+    assert_eq!(token, expected_token);
 }
 
 #[test]
 fn compute_instruction() {
-  let expected_instruction = Instruction::Compute {
-    dest: Some(Token::Dest(&"M")),
-    comp: Some(Token::Comp(&"D|A")),
-    jump: Some(Token::Jump(&"JNE")),
-  };
+    let expected_instruction = Instruction::Compute {
+        dest: Some(Token::Dest(&"M")),
+        comp: Some(Token::Comp(&"D|A")),
+        jump: Some(Token::Jump(&"JNE")),
+    };
 
-  let instruction = parse_instruction("M=D|A;JNE");
-  let (_, instruction) = instruction.unwrap();
+    let instruction = parse_instruction("M=D|A;JNE");
+    let (_, instruction) = instruction.unwrap();
 
-  assert_eq!(instruction, expected_instruction);
+    assert_eq!(instruction, expected_instruction);
 }
