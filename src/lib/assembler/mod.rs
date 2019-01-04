@@ -48,7 +48,7 @@ impl Assembler {
       };
     }
 
-    for instruction in instructions.iter() {
+    for instruction in instructions {
       let code = match instruction {
         Instruction::Compute { dest, comp, jump } => {
           translate_compute_instruction(dest, comp, jump)
@@ -90,7 +90,7 @@ impl Assembler {
   }
 }
 
-fn translate_compute_instruction(dest: &Option<Token>, comp: &Token, jump: &Option<Token>) -> u16 {
+fn translate_compute_instruction(dest: Option<Token>, comp: Token, jump: Option<Token>) -> u16 {
   let dest = match dest {
     Some(Token::Dest(dest)) => translate_dest(dest),
     None => 0b000,
