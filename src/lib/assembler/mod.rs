@@ -39,7 +39,7 @@ impl Assembler {
 
     let mut labels: HashMap<&str, u16> = HashMap::new();
 
-    for instruction in instructions.iter() {
+    for instruction in &instructions {
       match instruction {
         Instruction::Label(label) => {
           labels.insert(label, pc as u16);
