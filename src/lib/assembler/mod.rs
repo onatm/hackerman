@@ -172,3 +172,34 @@ fn translate_jump(jump: &str) -> u16 {
     jump => panic!("Invalid jump instruction: {}", jump),
   }
 }
+
+#[test]
+fn full_compute_instruction() {
+  let expected_binary: u16 = 0b1111_1100_1001_1111;
+
+  let binary = translate_compute_instruction(
+    &Some(Token::Dest(&"MD")),
+    &Token::Comp(&"M-1"),
+    &Some(Token::Jump(&"JMP")),
+  );
+
+  assert_eq!(binary, expected_binary);
+}
+
+#[test]
+fn compute_instruction_with_dest_and_comp() {
+  let expected_binary: u16 = 0b1110_0100_1101_0000;
+
+  let binary = translate_compute_instruction(&Some(Token::Dest(&"D")), &Token::Comp(&"D-A"), &None);
+
+  assert_eq!(binary, expected_binary);
+}
+
+#[test]
+fn compute_instruction_with_comp_and_jump() {
+  let expected_binary: u16 = 0b1110_1010_1000_0101;
+
+  let binary = translate_compute_instruction(&None, &Token::Comp(&"0"), &Some(Token::Jump(&"JNE")));
+
+  assert_eq!(binary, expected_binary);
+}
