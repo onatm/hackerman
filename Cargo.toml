@@ -1,6 +1,6 @@
 [package]
 name = "hackerman"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["onatm <onatmercan@gmail.com>"]
 edition = "2018"
 
