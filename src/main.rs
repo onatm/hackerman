@@ -3,6 +3,8 @@ use hackerman_lib::parser::Parser;
 use std::env;
 use std::error::Error;
 use std::fs::File;
+use std::fs::OpenOptions;
+use std::io::prelude::*;
 use std::io::Read;
 use std::process;
 
@@ -33,8 +35,14 @@ fn assemble(config: Config) -> Result<(), Box<Error>> {
 
     let codes = Assembler::assemble(instructions);
 
+    let mut output_file = OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .create(true)
+        .open(config.output)?;
+
     for code in codes {
-        println!("{:016b}", code);
+        writeln!(output_file, "{:016b}", code)?;
     }
 
     Ok(())
