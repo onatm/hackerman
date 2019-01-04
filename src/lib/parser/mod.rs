@@ -129,7 +129,13 @@ impl Parser {
     let mut instructions: Vec<Instruction> = Vec::new();
 
     for line in input.lines() {
-      instructions.push(parse_instruction(line.trim_start()).unwrap().1);
+      let line = line.trim();
+
+      if line.is_empty() || line.starts_with(&"//") {
+        continue;
+      }
+
+      instructions.push(parse_instruction(line).unwrap().1);
     }
 
     instructions
