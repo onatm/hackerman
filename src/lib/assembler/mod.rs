@@ -76,9 +76,7 @@ impl Assembler {
 
           code
         }
-        Instruction::Label(..) => {
-          continue;
-        }
+        _ => continue,
       };
 
       codes.push(code);
