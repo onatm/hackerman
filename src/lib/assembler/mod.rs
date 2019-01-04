@@ -50,30 +50,30 @@ impl Assembler {
 
     for instruction in instructions {
       let code = match instruction {
-        Instruction::Compute { dest, comp, jump } => {
-          translate_compute_instruction(dest, comp, jump)
-        }
+        Instruction::Compute {
+          ref dest,
+          ref comp,
+          ref jump,
+        } => translate_compute_instruction(dest, comp, jump),
         Instruction::Address(symbol) => {
           let code: u16;
 
           if let Result::Ok(symbol) = i32::from_str(symbol) {
             code = symbol as u16;
+          } else if symbol_table.contains_key(symbol) {
+            code = symbol_table[symbol];
+          } else if labels.contains_key(symbol) {
+            code = labels[symbol];
           } else {
-            if symbol_table.contains_key(symbol) {
-              code = *symbol_table.get(symbol).unwrap();
-            } else if labels.contains_key(symbol) {
-              code = *labels.get(symbol).unwrap();
-            } else {
-              let address = symbol_table.len() - 7;
+            let address = symbol_table.len() - 7;
 
-              if address >= 16384 {
-                panic!("Out of memory! Too many user defined symbols!");
-              }
-
-              code = address as u16;
-
-              symbol_table.insert(symbol, code);
+            if address >= 16384 {
+              panic!("Out of memory! Too many user defined symbols!");
             }
+
+            code = address as u16;
+
+            symbol_table.insert(symbol, code);
           }
 
           code
@@ -90,7 +90,7 @@ impl Assembler {
   }
 }
 
-fn translate_compute_instruction(dest: Option<Token>, comp: Token, jump: Option<Token>) -> u16 {
+fn translate_compute_instruction(dest: &Option<Token>, comp: &Token, jump: &Option<Token>) -> u16 {
   let dest = match dest {
     Some(Token::Dest(dest)) => translate_dest(dest),
     None => 0b000,
@@ -129,34 +129,34 @@ fn translate_dest(dest: &str) -> u16 {
 
 fn translate_comp(comp: &str) -> u16 {
   let code = match comp {
-    "0" => 0b0_101010,
-    "1" => 0b0_111111,
-    "-1" => 0b0_111010,
-    "D" => 0b0_001100,
-    "A" => 0b0_110000,
-    "!D" => 0b0_001101,
-    "!A" => 0b0_110001,
-    "-D" => 0b0_001111,
-    "-A" => 0b0_110011,
-    "D+1" => 0b0_011111,
-    "A+1" => 0b0_110111,
-    "D-1" => 0b0_001110,
-    "A-1" => 0b0_110010,
-    "D+A" => 0b0_000010,
-    "D-A" => 0b0_010011,
-    "A-D" => 0b0_000111,
-    "D&A" => 0b0_000000,
-    "D|A" => 0b0_010101,
-    "M" => 0b1_110000,
-    "!M" => 0b1_110001,
-    "-M" => 0b1_110011,
-    "M+1" => 0b1_110111,
-    "M-1" => 0b1_110010,
-    "D+M" => 0b1_000010,
-    "D-M" => 0b1_010011,
-    "M-D" => 0b1_000111,
-    "D&M" => 0b1_000000,
-    "D|M" => 0b1_010101,
+    "0" => 0b010_1010,
+    "1" => 0b011_1111,
+    "-1" => 0b011_1010,
+    "D" => 0b000_1100,
+    "A" => 0b011_0000,
+    "!D" => 0b000_1101,
+    "!A" => 0b011_0001,
+    "-D" => 0b000_1111,
+    "-A" => 0b011_0011,
+    "D+1" => 0b001_1111,
+    "A+1" => 0b011_0111,
+    "D-1" => 0b000_1110,
+    "A-1" => 0b011_0010,
+    "D+A" => 0b000_0010,
+    "D-A" => 0b001_0011,
+    "A-D" => 0b000_0111,
+    "D&A" => 0b000_0000,
+    "D|A" => 0b001_0101,
+    "M" => 0b111_0000,
+    "!M" => 0b111_0001,
+    "-M" => 0b111_0011,
+    "M+1" => 0b111_0111,
+    "M-1" => 0b111_0010,
+    "D+M" => 0b100_0010,
+    "D-M" => 0b101_0011,
+    "M-D" => 0b100_0111,
+    "D&M" => 0b100_0000,
+    "D|M" => 0b101_0101,
     comp => panic!("Invalid comp instruction: {}", comp),
   };
 

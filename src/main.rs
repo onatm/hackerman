@@ -14,7 +14,7 @@ struct Config {
 }
 
 impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &str> {
+    pub fn create(args: &[String]) -> Result<Config, &str> {
         if args.len() < 3 {
             return Err("Usage: hackerman input.asm output.hack");
         }
@@ -51,7 +51,7 @@ fn assemble(config: Config) -> Result<(), Box<Error>> {
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    let config = Config::new(&args).unwrap_or_else(|err| {
+    let config = Config::create(&args).unwrap_or_else(|err| {
         eprintln!("Problem parsing arguments: {}", err);
         process::exit(1);
     });
