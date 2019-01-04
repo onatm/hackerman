@@ -113,7 +113,6 @@ fn translate_compute_instruction(dest: &Option<Token>, comp: &Token, jump: &Opti
 
 fn translate_dest(dest: &str) -> u16 {
   let code = match dest {
-    "" => 0b000,
     "M" => 0b001,
     "D" => 0b010,
     "MD" => 0b011,
@@ -165,7 +164,6 @@ fn translate_comp(comp: &str) -> u16 {
 
 fn translate_jump(jump: &str) -> u16 {
   match jump {
-    "" => 0b000,
     "JGT" => 0b001,
     "JEQ" => 0b010,
     "JGE" => 0b011,
