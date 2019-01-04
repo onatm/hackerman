@@ -201,3 +201,103 @@ fn compute_instruction_with_comp_and_jump() {
 
   assert_eq!(binary, expected_binary);
 }
+
+#[test]
+fn assemble() {
+  let expected_binaries: Vec<u16> = vec![
+    0b0000_0001_0000_0000,
+    0b1110_1100_0001_0000,
+    0b0000_0000_0000_0000,
+    0b1110_0011_0000_1000,
+    0b0000_0000_1000_0101,
+    0b1110_1010_1000_0111,
+    0b0000_0000_0000_1111,
+    0b1110_0011_0000_1000,
+    0b0000_0000_0000_0000,
+    0b1111_1100_1010_1000,
+    0b1111_1100_0001_0000,
+    0b1110_1100_1010_0000,
+    0b1111_0001_1101_0000,
+    0b1110_1010_1000_1000,
+    0b0000_0000_0001_0011,
+    0b1110_0011_0000_0101,
+    0b0000_0000_0000_0000,
+    0b1111_1100_1010_0000,
+    0b1110_1110_1000_1000,
+  ];
+
+  let instructions: &[Instruction] = &[
+    Instruction::Address(&"256"),
+    Instruction::Compute {
+      dest: Some(Token::Dest(&"D")),
+      comp: Token::Comp(&"A"),
+      jump: None,
+    },
+    Instruction::Address(&"SP"),
+    Instruction::Compute {
+      dest: Some(Token::Dest(&"M")),
+      comp: Token::Comp(&"D"),
+      jump: None,
+    },
+    Instruction::Address(&"133"),
+    Instruction::Compute {
+      dest: None,
+      comp: Token::Comp(&"0"),
+      jump: Some(Token::Jump(&"JMP")),
+    },
+    Instruction::Address(&"R15"),
+    Instruction::Compute {
+      dest: Some(Token::Dest(&"M")),
+      comp: Token::Comp(&"D"),
+      jump: None,
+    },
+    Instruction::Address(&"SP"),
+    Instruction::Compute {
+      dest: Some(Token::Dest(&"AM")),
+      comp: Token::Comp(&"M-1"),
+      jump: None,
+    },
+    Instruction::Compute {
+      dest: Some(Token::Dest(&"D")),
+      comp: Token::Comp(&"M"),
+      jump: None,
+    },
+    Instruction::Compute {
+      dest: Some(Token::Dest(&"A")),
+      comp: Token::Comp(&"A-1"),
+      jump: None,
+    },
+    Instruction::Compute {
+      dest: Some(Token::Dest(&"D")),
+      comp: Token::Comp(&"M-D"),
+      jump: None,
+    },
+    Instruction::Compute {
+      dest: Some(Token::Dest(&"M")),
+      comp: Token::Comp(&"0"),
+      jump: None,
+    },
+    Instruction::Address(&"END_EQ"),
+    Instruction::Compute {
+      dest: None,
+      comp: Token::Comp(&"D"),
+      jump: Some(Token::Jump(&"JNE")),
+    },
+    Instruction::Address(&"SP"),
+    Instruction::Compute {
+      dest: Some(Token::Dest(&"A")),
+      comp: Token::Comp(&"M-1"),
+      jump: None,
+    },
+    Instruction::Compute {
+      dest: Some(Token::Dest(&"M")),
+      comp: Token::Comp(&"-1"),
+      jump: None,
+    },
+    Instruction::Label(&"END_EQ"),
+  ];
+
+  let binaries = Assembler::assemble(instructions);
+
+  assert_eq!(binaries, expected_binaries);
+}
