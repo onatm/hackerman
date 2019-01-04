@@ -56,8 +56,8 @@ impl Assembler {
         Instruction::Address(symbol) => {
           let code: u16;
 
-          if let Result::Ok(address) = i32::from_str(symbol) {
-            code = address as u16;
+          if let Result::Ok(symbol) = i32::from_str(symbol) {
+            code = symbol as u16;
           } else {
             if symbol_table.contains_key(symbol) {
               code = *symbol_table.get(symbol).unwrap();

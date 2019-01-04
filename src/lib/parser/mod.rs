@@ -23,8 +23,8 @@ pub enum Instruction<'a> {
 named!(parse_address<&str, Instruction>,
     do_parse!(
         tag!("@") >> 
-        addr: rest >>
-        (Instruction::Address(addr))
+        symbol: rest >>
+        (Instruction::Address(symbol))
     )
 );
 
