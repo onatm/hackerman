@@ -1,3 +1,4 @@
+use hackerman_lib::assembler::Assembler;
 use hackerman_lib::parser::Parser;
 use std::env;
 use std::error::Error;
@@ -30,8 +31,10 @@ fn assemble(config: Config) -> Result<(), Box<Error>> {
 
     let instructions = Parser::parse(&contents);
 
-    for instruction in instructions {
-        println!("{:?}", instruction);
+    let codes = Assembler::assemble(instructions);
+
+    for code in codes {
+        println!("{:016b}", code);
     }
 
     Ok(())
