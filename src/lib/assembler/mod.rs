@@ -6,7 +6,7 @@ use std::str::FromStr;
 pub struct Assembler;
 
 impl Assembler {
-  pub fn assemble(instructions: Vec<Instruction>) -> Vec<u16> {
+  pub fn assemble(instructions: &[Instruction]) -> Vec<u16> {
     let mut codes: Vec<u16> = Vec::new();
 
     let mut symbol_table: HashMap<&str, u16> = HashMap::new();
@@ -39,7 +39,7 @@ impl Assembler {
 
     let mut labels: HashMap<&str, u16> = HashMap::new();
 
-    for instruction in &instructions {
+    for instruction in instructions {
       match instruction {
         Instruction::Label(label) => {
           labels.insert(label, pc as u16);
@@ -50,11 +50,9 @@ impl Assembler {
 
     for instruction in instructions {
       let code = match instruction {
-        Instruction::Compute {
-          ref dest,
-          ref comp,
-          ref jump,
-        } => translate_compute_instruction(dest, comp, jump),
+        Instruction::Compute { dest, comp, jump } => {
+          translate_compute_instruction(dest, comp, jump)
+        }
         Instruction::Address(symbol) => {
           let code: u16;
 

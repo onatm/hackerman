@@ -33,7 +33,7 @@ fn assemble(config: Config) -> Result<(), Box<Error>> {
 
     let instructions = Parser::parse(&contents);
 
-    let codes = Assembler::assemble(instructions);
+    let codes = Assembler::assemble(&instructions);
 
     let mut output_file = OpenOptions::new()
         .write(true)
